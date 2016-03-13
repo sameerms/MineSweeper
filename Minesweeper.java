@@ -4,11 +4,10 @@ public class Minesweeper {
 
 	private static MineField field;
 	private static Ranking rank;	
+	private static Scanner in;  // modified code in variable was never closed.Continuous in while loop
 	public static void main(String[] args) {
 		rank=new Ranking();
-		mainMessage()
-		
-		;
+		mainMessage();
 		while(gameCountinue());
 		System.out.println("\nThank you for playing :) Have a nice day!");
 	}	
@@ -19,49 +18,23 @@ public class Minesweeper {
 
 			field.show();
 			System.out.print("\nPlease enter your move(row col): ");
-			Scanner in = new Scanner(System.in);
+			in = new Scanner(System.in); // modified in variable -initiated in method
 			String input = in.nextLine();
 
-			if (input.equals("top")) {
-				rank.show();
-				continue;
-
-
-			}
-			if (input.equals("restart")) {
-				rank.recordName(result);
-				return true;
-			}
-			if (input.equals("exit")) {
-				rank.recordName(result);
+			if (!cmd(input, result)){
 				return false;
 			}
-			if (field.legalMoveString(input)) {
+			else if (field.legalMoveString(input)) {
 				result++;
 				if (result == 35) {
 					System.out.println("Congratulations you WON the game!");
-					{
+					
 						rank.recordName(result);
-						{
+						
 							return true;
 						}
-					}
 				}
-				continue;
-			}
-//			if(input.equals("exit")){
-//				rank.recordName(result);
-//				return false;
-//			}
-//			if(field.legalMoveString(input)){
-//				result++;
-//				if(result==35){
-//					System.out.println("Congratulations you WON the game!");
-//					rank.recordName(result);
-//					return true;
-//				}
-//				continue;
-//			}
+// removed the dead code which is commented and removed the excess off semicolons which are not required.
 			else if (field.getBoom()) {
 				System.out.println("\nBooooooooooooooooooooooooooooom!You stepped on a mine!You survived " + result + " turns");
 				rank.recordName(result);
@@ -72,7 +45,21 @@ public class Minesweeper {
 
 
 		}
-
+private static boolean cmd(String in, int result){ // implemeted new cmd method to simplify the while loop in gameContinue() method
+	if (in.equals("top")) {
+		rank.show();
+	
+	}
+	else if (in.equals("restart")) {
+		rank.recordName(result);
+		return true;
+	}
+	else if (in.equals("exit")) {
+		rank.recordName(result);
+		return false;
+	}
+	return true;
+}
 	
 	private static void mainMessage(){
 		System.out.println("Welcome to Minesweeper!");
