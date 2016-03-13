@@ -1,5 +1,7 @@
 import java.util.Random;
 
+/* This class draws the minefield for MineSweeper game */
+
 class MineField{
 
 	private boolean[][] mines,visible;
@@ -13,12 +15,7 @@ class MineField{
 		visible=new boolean[rowMax][colMax];
 		boom=false;
 		
-		for(int row=0;row<rowMax;row++){
-			for(int col=0;col<colMax;col++){
-				mines[row][col]=false;
-				visible[row][col]=false;
-			}
-		}
+		initMap();
 		
 		int counter2=15;
 		int randomRow,randomCol;
@@ -34,6 +31,16 @@ class MineField{
 			}
 		}
 	}	
+	
+	private void initMap(){
+		for(int row=0;row<rowMax;row++){
+			for(int col=0;col<colMax;col++){
+				mines[row][col]=false;
+				visible[row][col]=false;
+			}
+		}
+		
+	}
 	private boolean trymove(int randomRow, int randomCol) {
 		if(mines[randomRow][randomCol]){
 			return false;
@@ -62,13 +69,7 @@ class MineField{
 		int count=0;
 		if(visible[row][col]){
 			if(mines[row][col]) return '*';
-			for(int irow=row-1;irow<=row+1;irow++){
-				for(int icol=col-1;icol<=col+1;icol++){
-					if(icol>=0&&icol<colMax&&irow>=0&&irow<rowMax){
-						if(mines[irow][icol]) count++;
-					}
-				}
-			}
+			count= drawBordloop(row, col);
 		}
 		else{
 			if(boom){
@@ -98,6 +99,18 @@ class MineField{
 	public boolean getBoom(){
 		
 		return boom;
+	}
+	
+	private int drawBordloop(int row, int col){  // this method simplifies the loop in drawchar method. 
+		int count = 0;
+		for(int irow=row-1;irow<=row+1;irow++){
+			for(int icol=col-1;icol<=col+1;icol++){
+				if(icol>=0&&icol<colMax&&irow>=0&&irow<rowMax){
+					if(mines[irow][icol]) count++;
+				}
+			}
+		}
+		return count;
 	}
 
 
